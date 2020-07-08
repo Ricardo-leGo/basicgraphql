@@ -1,25 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { querySpace } from './services/gql'
+import { useQuery } from '@apollo/react-hooks';
+import './index.css'
 
-function App() {
+const App = () => {
+    
+  const { data } = useQuery(querySpace);
+  console.log(data);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {data && data.launchesPast.map(
+        (el, i) => (
+          <div key={i} className="card-container">
+            <span>{i+1}</span>
+            <h1>{el.mission_name}</h1>
+
+            {el.ships && el.ships.map((eme, j) =>
+              <div key={j}>
+
+                <h3>     {eme.name}   </h3>
+                <img src={eme.image}  alt="No se puede visualizar" />
+
+              </div>)}
+            
+          </div>
+        ))}
+    </>
   );
 }
 
